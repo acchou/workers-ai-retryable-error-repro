@@ -2,7 +2,8 @@
 
 Cloudflare already marks some Workers AI binding failures as retryable
 (`retryable: true`). On the `workers-ai-provider` OpenAI Responses path, that
-flag is dropped before the AI SDK sees it. The SDK is told to retry
+flag reaches the AI SDK unchanged, but is not translated into its recognized
+`APICallError.isRetryable` contract. The SDK is configured to retry
 (`maxRetries: 2`) but treats the error as terminal, so a brief binding failure
 fails the whole request.
 
@@ -106,7 +107,8 @@ AI SDK streamText(maxRetries: 2)
   -> injected AI.run()
 ```
 
-The only stand-in is the Cloudflare binding. The first call throws the
+A custom Responses wire plugin explicitly selects `createOpenAI(...).responses(modelId)`.
+The SDK and provider adapters are real; the Cloudflare binding is injected. Its first call throws the
 observed platform-error shape:
 
 ```js
@@ -184,4 +186,4 @@ and `result.text` rejects with no answer.
 Compare `npm run fixed` for the same real provider chain with error
 normalization.
 
-This repository is local and has not been published or filed upstream.
+Public reproducer: https://github.com/acchou/workers-ai-retryable-error-repro
