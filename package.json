@@ -1,0 +1,21 @@
+{
+  "name": "workers-ai-retryable-error-repro",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Reproduce Cloudflare binding retryable errors bypassing AI SDK retries on the OpenAI Responses delegate path",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "reproduce": "node repro.mjs",
+    "fixed": "node repro.mjs --fixed",
+    "test": "node --test repro.test.mjs"
+  },
+  "dependencies": {
+    "ai": "7.0.58",
+    "@ai-sdk/openai": "4.0.15",
+    "@ai-sdk/provider": "4.0.7",
+    "workers-ai-provider": "4.0.0"
+  }
+}
